@@ -1,0 +1,233 @@
+@font-face {
+  font-family: 'proxima_nova';
+  src: url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_light_0.eot');
+  src: url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_light_0.eot?#iefix') format('embedded-opentype'), url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_light_0.woff') format('woff'), url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_light_0.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'proxima_nova';
+  src: url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_thin_0.eot');
+  src: url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_thin_0.eot?#iefix') format('embedded-opentype'), url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_thin_0.woff') format('woff'), url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_thin_0.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'proxima_nova';
+  src: url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_regular_0.eot');
+  src: url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_regular_0.eot?#iefix') format('embedded-opentype'), url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_regular_0.woff') format('woff'), url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_regular_0.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'proxima_nova';
+  src: url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_semibold_0.eot');
+  src: url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_semibold_0.eot?#iefix') format('embedded-opentype'), url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_semibold_0.woff') format('woff'), url('https://d3nkxvtkt5c8vi.cloudfront.net/3.0.1/fonts/proxima_nova_semibold_0.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+body {
+  background: #121314;
+  font-weight: 100;
+  letter-spacing: 1px;
+  color: #dfe0e6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 100;
+  letter-spacing: 1px;
+}
+
+a {
+  color: #84bd00;
+  text-decoration: none;
+}
+a:hover,
+a:focus {
+  color: #648f00;
+  text-decoration: underline;
+}
+a:focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+.navbar-logo {
+  width: 134px;
+  height: 40px;
+  display: inline-block;
+  text-indent: 9999px;
+  position: relative;
+  top: -10px;
+  background-image: url('../images/logo.png');
+}
+
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: inherit;
+}
+
+.navbar-default {
+  background-color: rgba(0,0,0,.5);
+  border-color: #000;
+}
+
+.navbar-default .navbar-brand {
+  color: inherit;
+  font-size: 32px;
+}
+
+.navbar .container {
+  width: 100%;
+}
+
+.navbar-form .form-control {
+  width: 290px;
+}
+
+.container.regions {
+  width: 100%;
+  position: relative;
+}
+
+.regions .info {
+  background-color: rgba(50,50,50,.3);
+  box-shadow: 0 0 50px rgba(255,255,255,.1);
+}
+
+.glyphicon-search {
+  top: 0;
+}
+
+.entity-info {
+  display: inline-block;
+  position: absolute;
+  padding: 10px;
+  z-index: 2;
+  left: 0;
+  bottom: 0;
+  background: rgba(0,0,0,.3)
+}
+
+.entity-info h1,
+.entity-info h2 {
+  margin: 0;
+}
+
+#regions-map {
+  height: 100%;
+  width: 80%;
+  z-index: 1;
+  position: fixed;
+  display: none;
+}
+
+#regions-info {
+  padding-top: 50px;
+  position: relative;
+  z-index: 2;
+  border-right: solid 1px rgba(0,0,0,.1);
+}
+
+.albums-info > div {
+  padding: 0 10px;
+  margin-bottom: 5px;
+}
+
+.albums-info > h3 {
+  font-weight: 200;
+  padding: 0 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.albums-info .alert-warning {
+  font-size: .9em;
+  padding-top: .5em;
+  padding-bottom: .5em;
+}
+
+.album-info.searched {
+  border-left: solid 5px #648f00;
+}
+
+.album-info:hover {
+  background: rgba(255,255,255,.1);
+}
+
+.albums-info p {
+  margin: .4em 0;
+}
+
+.albums-info .explicit {
+  font-size: .7em;
+  text-transform: uppercase;
+  border: solid 1px #999;
+  line-height: .6em;
+  padding: .1em .1em 0 .3em;
+  letter-spacing: .2em;
+}
+
+.albums-info .uri {
+  letter-spacing: .05em;
+  color: #999;
+}
+
+.albums-info .uri a {
+  color: inherit;
+}
+
+.albums-info .cover {
+  box-shadow: 0 0 1px rgba(255,255,255,.3);
+  width: 64px;
+  height: 64px;
+  margin-top: 5px;
+  display: inline-block;
+  float: left;
+  border-radius: 2px
+}
+
+.albums-info ul {
+  height: 64px;
+  margin-top: 5px;
+  display: inline-block;
+  padding-left: 10px;
+  list-style: none;
+}
+
+.checkbox {
+  white-space: nowrap;
+}
+
+.checkbox label {
+  font-weight: 100;
+}
+
+.copyrights {
+  font-size: .8em;
+}
+
+.albums-only {
+  display: none;
+  width: 100%;
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  text-align: center;
+}
+
+.invalid-search .albums-only {
+  display: block;
+}
+
+@media (min-width: 992px) {
+  #regions-map {
+    display: block;
+  }
+
+  .entity-info {
+    position: fixed;
+  }
+}

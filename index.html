@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Album Availability Map</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <span class="navbar-brand">
+            <span class="navbar-logo">Spotify</span>
+            <span class="navbar-title">Album Availability</span>
+          </span>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <form id="search-form" class="navbar-form navbar-left form-inline" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="e.g. spotify:album:18qY7zpuNqeXNGywRysjxx">
+            </div>
+            <button type="submit" class="btn btn-default">Search</button>
+            <div class="checkbox">
+              <label>
+                <input id="exact-search-button" type="checkbox"><span class="control-indicator"></span> All album versions
+              </label>
+            </div>
+          </form>
+        </div><!-- /.navbar-collapse -->
+      </div>
+    </div>
+    <div class="container regions">
+      <div class="row">
+        <div class="map col-md-9">
+          <div id="data-info" class="entity-info">
+            <h1 class="title"></h1>
+            <h2 class="artist"></h2>
+          </div>
+          <div id="regions-map"></div>
+        </div>
+        <div class="info col-md-3 albums-info" id="regions-info" data-active="null">
+        </div>
+      </div>
+    </div>
+
+    <script id="template-album-info-big" type="x-tmpl-mustache">
+      <h1 class="title">{{albumTitle}}</h1>
+      <h2 class="artist">{{albumType}} by {{artistName}}</h2>
+    </script>
+
+    <script id="template-album-not-found" type="x-tmpl-mustache">
+      <div class="row alert-warning">
+        Exact match for the requested album is not available <a href="{{albumApiLink}}">{{albumUri}}</a>
+      </div>
+    </script>
+
+    <script id="template-album-not-available" type="x-tmpl-mustache">
+      <h3 class="row">Not available</h4>
+      <div class="row">
+        <p>
+        {{#markets}}
+          <span title="{{name}} ">{{code}}</span>
+        {{/markets}}
+        </p>
+      </div>
+    </script>
+
+    <div class="albums-only">
+      <h2>Only albums are supported</h2>
+    </div>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+  </body>
+</html>
