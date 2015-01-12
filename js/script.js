@@ -3,7 +3,7 @@ google.setOnLoadCallback(onGoogleLoaded);
 
 function onGoogleLoaded() {
 
-  var ALL_MARKETS = {"AD":"Andorra","AR":"Argentina","AU":"Australia","AT":"Austria","BE":"Belgium","BO":"Bolivia","BR":"Brazil","BG":"Bulgaria","CA":"Canada","CL":"Chile","CO":"Colombia","CR":"CostaRica","CY":"Cyprus","CZ":"CzechRepublic","DK":"Denmark","DO":"DominicanRepublic","EC":"Ecuador","SV":"ElSalvador","EE":"Estonia","FI":"Finland","FR":"France","DE":"Germany","GR":"Greece","GT":"Guatemala","HN":"Honduras","HK":"HongKong","HU":"Hungary","IS":"Iceland","IE":"RepublicofIreland","IT":"Italy","LV":"Latvia","LI":"Liechtenstein","LT":"Lithuania","LU":"Luxembourg","MY":"Malaysia","MT":"Malta","MX":"Mexico","MC":"Monaco","NL":"Netherlands","NZ":"NewZealand","NI":"Nicaragua","NO":"Norway","PA":"Panama","PY":"Paraguay","PE":"Peru","PH":"Philippines","PL":"Poland","PT":"Portugal","RO":"Romania","ES":"Spain","SG":"Singapore","SK":"Slovakia","SI":"Slovenia","SE":"Sweden","CH":"Switzerland","TW":"Taiwan","TR":"Turkey","GB":"UnitedKingdom","US":"UnitedStates","UY":"Uruguay"};
+  var ALL_MARKETS = {"AD":"Andorra","AR":"Argentina","AU":"Australia","AT":"Austria","BE":"Belgium","BO":"Bolivia","BR":"Brazil","BG":"Bulgaria","CA":"Canada","CL":"Chile","CO":"Colombia","CR":"Costa Rica","CY":"Cyprus","CZ":"Czech Republic","DK":"Denmark","DO":"Dominican Republic","EC":"Ecuador","SV":"El Salvador","EE":"Estonia","FI":"Finland","FR":"France","DE":"Germany","GR":"Greece","GT":"Guatemala","HN":"Honduras","HK":"Hong Kong","HU":"Hungary","IS":"Iceland","IE":"Republic of Ireland","IT":"Italy","LV":"Latvia","LI":"Liechtenstein","LT":"Lithuania","LU":"Luxembourg","MY":"Malaysia","MT":"Malta","MX":"Mexico","MC":"Monaco","NL":"Netherlands","NZ":"New Zealand","NI":"Nicaragua","NO":"Norway","PA":"Panama","PY":"Paraguay","PE":"Peru","PH":"Philippines","PL":"Poland","PT":"Portugal","RO":"Romania","ES":"Spain","SG":"Singapore","SK":"Slovakia","SI":"Slovenia","SE":"Sweden","CH":"Switzerland","TW":"Taiwan","TR":"Turkey","GB":"United Kingdom","US":"United States","UY":"Uruguay"};
   var SPOTIFY_API = 'https://api.spotify.com/v1';
 
   var HIGHLIGHT_TIMEOUT = 100;
@@ -87,6 +87,7 @@ function onGoogleLoaded() {
     evt.preventDefault();
 
     var url = evt.dataTransfer.getData('text/plain');
+    if (!url) return;
     if (url.indexOf('http://open.spotify.com/') > -1) {
       var parsed = parseUri(url.replace('http://open.spotify.com/', 'spotify/'), '/');
     } else {
@@ -248,7 +249,10 @@ function onGoogleLoaded() {
       }).join(' ') + '</p>';
       html += '<p class="uri"><a href="https://api.spotify.com/v1/albums/' + album.id + '">' + album.uri+ '</a></p>';
       if (copyrights.get('C')) {
-        html += '<p class="copyrights">&copy; ' + copyrights.get('C').text + '</p>';
+        html += '<p class="copyrights">&copy; ' + copyrights.get('C').text; + '</p>';
+      }
+      if (copyrights.get('P')) {
+        html += '<p class="copyrights">&#8471; ' + copyrights.get('P').text + '</p>';
       }
       div.innerHTML = html;
 
@@ -347,7 +351,7 @@ function onGoogleLoaded() {
       keepAspectRatio: true,
       colorAxis: {
         minValue: 0,
-        colors: ['#8f2600', '#FED048', '#4B6601', '#B4D612'],
+        colors: ['#8f2600', '#bdaa00', '#4B6601', '#B4D612'],
         values: [0, 0.5, 1, max]
       },
       legend: 'none',

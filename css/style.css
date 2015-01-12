@@ -104,7 +104,7 @@ a:focus {
 .entity-info {
   display: inline-block;
   position: absolute;
-  padding: 10px;
+  padding: 1em;
   z-index: 2;
   left: 0;
   bottom: 0;
@@ -132,7 +132,7 @@ a:focus {
 }
 
 .albums-info > div {
-  padding: 0 10px;
+  padding: 0 10px 5px 10px;
   margin-bottom: 5px;
 }
 
@@ -205,8 +205,16 @@ a:focus {
   font-weight: 100;
 }
 
-.copyrights {
-  font-size: .8em;
+.albums-info .copyrights {
+  font-size: .85em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.albums-info .album-info:hover .copyrights {
+  white-space: normal;
 }
 
 .albums-only {
