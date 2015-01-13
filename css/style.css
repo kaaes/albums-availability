@@ -105,6 +105,7 @@ a:focus {
   display: inline-block;
   position: absolute;
   padding: 1em;
+  margin: 15px;
   z-index: 2;
   left: 0;
   bottom: 0;

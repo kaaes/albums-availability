@@ -153,8 +153,10 @@ function onGoogleLoaded() {
   function getAlbums(uri, albumName, callback, result) {
     d3.json(uri, function(error, albums) {
       albums.items.forEach(function(el) {
+        var elName = el.name.toLowerCase().replace(/[,.;:?!"]/g, '');
+        var alName = albumName.toLowerCase().replace(/[,.;:?!"]/g, '');
         var condition = getExactSearchEnabled() ? 
-          el.name == albumName : el.name.indexOf(albumName) == 0 || albumName.indexOf(el.name) == 0
+          el.name == alName : elName.indexOf(alName) == 0 || alName.indexOf(elName) == 0
         if (condition) {
           result.markets.push(el.available_markets || []);
           result.ids.push(el.id);
@@ -280,16 +282,21 @@ function onGoogleLoaded() {
           infoContainer.insertBefore(getAlbumInfo(el.key, el.values, album.id), infoContainer.firstChild);
         });
 
-        var exactAlbumFound = infoContainer.querySelector(".searched");
-        if (!exactAlbumFound) {
-          var html = Mustache.render(albumNotFoundTemplate, {
-            albumApiLink: album.href,
-            albumUri: album.uri
-          })
-          infoContainer.innerHTML = html + infoContainer.innerHTML;
+        if(!infoContainer.querySelector(".searched")) {
+          exactMatchNotFound(album);
         }
       });
+    } else {
+      exactMatchNotFound(album);
     }
+  }
+
+  function exactMatchNotFound(album) {
+    var html = Mustache.render(albumNotFoundTemplate, {
+      albumApiLink: album.href,
+      albumUri: album.uri
+    })
+    infoContainer.innerHTML = html + infoContainer.innerHTML;
   }
 
   function fillChartData(result) {
@@ -322,7 +329,7 @@ function onGoogleLoaded() {
           return { code: el, name: ALL_MARKETS[el]}
         })
       });
-      infoContainer.innerHTML = html;
+      infoContainer.innerHTML += html;
     }
 
     allMarkets.forEach(function(market) {
