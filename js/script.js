@@ -146,7 +146,19 @@ function onGoogleLoaded() {
       }
 
       var uri = SPOTIFY_API + '/artists/' + album.artists[0].id + '/albums?album_type=' + album.album_type;
-      getAlbums(uri, album.name, albumsCallback, { markets: [], ids: [], count: {} });
+
+      var markets = [];
+      var ids = [];
+      var count = {};
+      if (album.available_markets.length) {
+        markets.push(album.available_markets);
+        ids.push(album.id);
+        album.available_markets.forEach(function(market) {
+          count[market] = 1;
+        });
+      }
+
+      getAlbums(uri, album.name, albumsCallback, { markets: markets, ids: ids, count: count });
     });
   }
 
@@ -157,9 +169,9 @@ function onGoogleLoaded() {
         var alName = albumName.toLowerCase().replace(/[,.;:?!"]/g, '');
         var condition = getExactSearchEnabled() ? 
           el.name == alName : elName.indexOf(alName) == 0 || alName.indexOf(elName) == 0
-        if (condition) {
-          result.markets.push(el.available_markets || []);
+        if (condition && result.ids.indexOf(el.id) == -1) {
           result.ids.push(el.id);
+          result.markets.push(el.available_markets || []);
           if (el.available_markets) {
             el.available_markets.forEach(function(market) {
               result.count[market] = result.count[market] || 0;
@@ -312,13 +324,16 @@ function onGoogleLoaded() {
           allMarkets.splice(allMarkets.indexOf(market), 1);
         }
 
+        var name = market;
         if (ALL_MARKETS[market]) {
-          var el = [ALL_MARKETS[market], result.count[market], result.count[market] + ' versions available'];
-          el.spid = ids[i];
-          data.push(el);
+          name = ALL_MARKETS[market];
         } else {
           console.log('Not in available markets', market);
         }
+
+        var el = [name, result.count[market], result.count[market] + ' versions available'];
+        el.spid = ids[i];
+        data.push(el);
       });
     });
 
