@@ -88,8 +88,8 @@ function onGoogleLoaded() {
 
     var url = evt.dataTransfer.getData('text/plain');
     if (!url) return;
-    if (url.indexOf('http://open.spotify.com/') > -1) {
-      var parsed = parseUri(url.replace('http://open.spotify.com/', 'spotify/'), '/');
+    if (url.indexOf('open.spotify.com') > -1) {
+      var parsed = parseUri(url.replace(/https?:\/\/open.spotify.com\//, 'spotify/'), '/');
     } else {
       var parsed = parseUri(url);
     }
