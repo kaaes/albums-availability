@@ -3,7 +3,70 @@ google.setOnLoadCallback(onGoogleLoaded);
 
 function onGoogleLoaded() {
 
-  var ALL_MARKETS = {"AD":"Andorra","AR":"Argentina","AU":"Australia","AT":"Austria","BE":"Belgium","BO":"Bolivia","BR":"Brazil","BG":"Bulgaria","CA":"Canada","CL":"Chile","CO":"Colombia","CR":"Costa Rica","CY":"Cyprus","CZ":"Czech Republic","DK":"Denmark","DO":"Dominican Republic","EC":"Ecuador","SV":"El Salvador","EE":"Estonia","FI":"Finland","FR":"France","DE":"Germany","GR":"Greece","GT":"Guatemala","HN":"Honduras","HK":"Hong Kong","HU":"Hungary","IS":"Iceland","IE":"Republic of Ireland","IT":"Italy","LV":"Latvia","LI":"Liechtenstein","LT":"Lithuania","LU":"Luxembourg","MY":"Malaysia","MT":"Malta","MX":"Mexico","MC":"Monaco","NL":"Netherlands","NZ":"New Zealand","NI":"Nicaragua","NO":"Norway","PA":"Panama","PY":"Paraguay","PE":"Peru","PH":"Philippines","PL":"Poland","PT":"Portugal","RO":"Romania","ES":"Spain","SG":"Singapore","SK":"Slovakia","SI":"Slovenia","SE":"Sweden","CH":"Switzerland","TW":"Taiwan","TR":"Turkey","GB":"United Kingdom","US":"United States","UY":"Uruguay"};
+  var SITE_URL = 'https://kaaes.github.io/albums-availability';
+
+  var ALL_MARKETS = {
+    "AD": "Andorra",
+    "AR": "Argentina",
+    "AU": "Australia",
+    "AT": "Austria",
+    "BE": "Belgium",
+    "BO": "Bolivia",
+    "BR": "Brazil",
+    "BG": "Bulgaria",
+    "CA": "Canada",
+    "CL": "Chile",
+    "CO": "Colombia",
+    "CR": "Costa Rica",
+    "CY": "Cyprus",
+    "CZ": "Czech Republic",
+    "DK": "Denmark",
+    "DO": "Dominican Republic",
+    "EC": "Ecuador",
+    "SV": "El Salvador",
+    "EE": "Estonia",
+    "FI": "Finland",
+    "FR": "France",
+    "DE": "Germany",
+    "GR": "Greece",
+    "GT": "Guatemala",
+    "HN": "Honduras",
+    "HK": "Hong Kong",
+    "HU": "Hungary",
+    "ID": "Indonesia",
+    "IS": "Iceland",
+    "IE": "Republic of Ireland",
+    "IT": "Italy",
+    "JP": "Japan",
+    "LV": "Latvia",
+    "LI": "Liechtenstein",
+    "LT": "Lithuania",
+    "LU": "Luxembourg",
+    "MY": "Malaysia",
+    "MT": "Malta",
+    "MX": "Mexico",
+    "MC": "Monaco",
+    "NL": "Netherlands",
+    "NZ": "New Zealand",
+    "NI": "Nicaragua",
+    "NO": "Norway",
+    "PA": "Panama",
+    "PY": "Paraguay",
+    "PE": "Peru",
+    "PH": "Philippines",
+    "PL": "Poland",
+    "PT": "Portugal",
+    "ES": "Spain",
+    "SG": "Singapore",
+    "SK": "Slovakia",
+    "SE": "Sweden",
+    "CH": "Switzerland",
+    "TW": "Taiwan",
+    "TR": "Turkey",
+    "GB": "United Kingdom",
+    "US": "United States",
+    "UY": "Uruguay"
+  };
   var SPOTIFY_API = 'https://api.spotify.com/v1';
 
   var HIGHLIGHT_TIMEOUT = 100;
@@ -15,6 +78,7 @@ function onGoogleLoaded() {
   var albumInfoBig = document.querySelector('#data-info');
   var infoContainer = document.querySelector('#regions-info');
   var exactSearchButton = document.querySelector('#exact-search-button');
+  var loginButton = document.querySelector('#login-button');
 
   var albumInfoBigTemplate = document.querySelector('#template-album-info-big').innerHTML;
   var albumNotAvailableTemplate = document.querySelector('#template-album-not-available').innerHTML;
@@ -27,7 +91,9 @@ function onGoogleLoaded() {
   infoContainer.addEventListener('mouseover', handleMouseover);
   infoContainer.addEventListener('mouseout', handleMouseout);
 
-  exactSearchButton.checked = !getExactSearchEnabled();
+  loginButton.addEventListener('click', authenticate);
+
+  exactSearchButton.checked = !Config.getExactSearch();
   exactSearchButton.addEventListener('change', handleExactChange);
   searchForm.addEventListener('submit', handleFormSubmit);
 
@@ -39,8 +105,8 @@ function onGoogleLoaded() {
   }
 
   function handleExactChange(evt) {
-    setExactSearchEnabled(!evt.target.checked);
-    var lastSearch = getLastSearch();
+    Config.setExactSearch(!evt.target.checked);
+    var lastSearch = Config.getLastSearch();
     if (lastSearch) {
       performSearch(lastSearch);
     }
@@ -113,24 +179,31 @@ function onGoogleLoaded() {
   }
 
   function validateAndPerformSearch(parsedUri) {
+
     if (parsedUri.type == 'album') {
       document.body.classList.remove('invalid-search');
       performSearch(parsedUri.id);
     } else {
       document.body.classList.add('invalid-search');
-      drawChart([]);
-      albumInfoBig.innerHTML = '';
-      infoContainer.innerHTML = '';
+      clearChart();
     }
   }
 
-  function performSearch(id) {
-    setLastSearch(id);
+  function clearChart() {
+    drawChart([]);
+    albumInfoBig.innerHTML = '';
     infoContainer.innerHTML = '';
-    
-    d3.json(SPOTIFY_API + '/albums/' + id, function(error, album) {
-      if (error) {
-        console.error(error);
+  }
+
+  function performSearch(id) {
+    Config.setLastSearch(id);
+    infoContainer.innerHTML = '';
+
+    SpotifyApi.sendRequest(SPOTIFY_API + '/albums/' + id, function(error, album) {
+
+      if (error && error == 'unauthorised') {
+        document.body.classList.add('no-token');
+        clearChart();
         return;
       }
 
@@ -163,12 +236,12 @@ function onGoogleLoaded() {
   }
 
   function getAlbums(uri, albumName, callback, result) {
-    d3.json(uri, function(error, albums) {
+    SpotifyApi.sendRequest(uri, function(error, albums) {
       albums.items.forEach(function(el) {
         var elName = el.name.toLowerCase().replace(/[,.;:?!"]/g, '');
         var alName = albumName.toLowerCase().replace(/[,.;:?!"]/g, '');
-        var condition = getExactSearchEnabled() ? 
-          el.name == alName : elName.indexOf(alName) == 0 || alName.indexOf(elName) == 0
+        var condition = Config.getExactSearch() ?
+        el.name == alName : elName.indexOf(alName) == 0 || alName.indexOf(elName) == 0
         if (condition && result.ids.indexOf(el.id) == -1) {
           result.ids.push(el.id);
           result.markets.push(el.available_markets || []);
@@ -278,18 +351,18 @@ function onGoogleLoaded() {
   function fillInfoData(result, album) {
     var ids = result.ids;
     if (ids.length) {
-      d3.json(SPOTIFY_API + '/albums?ids=' + ids, function(error, albums) {
+      SpotifyApi.sendRequest(SPOTIFY_API + '/albums?ids=' + ids, function(error, albums) {
         console.log("Full found albums", albums.albums);
         var nest = d3.nest()
-          .key(function(d) { return d.name; })
-          .sortKeys(function(a, b) {
-            return a == album.name ? 1 : -1;
-          })
-          .sortValues(function(a, b){
-            return a.id == album.id ? -1 : 1;
-          })
-          .entries(albums.albums);
-        
+        .key(function(d) { return d.name; })
+        .sortKeys(function(a, b) {
+          return a == album.name ? 1 : -1;
+        })
+        .sortValues(function(a, b){
+          return a.id == album.id ? -1 : 1;
+        })
+        .entries(albums.albums);
+
         nest.forEach(function(el) {
           infoContainer.insertBefore(getAlbumInfo(el.key, el.values, album.id), infoContainer.firstChild);
         });
@@ -363,7 +436,7 @@ function onGoogleLoaded() {
     chartData.addColumn({type: 'string', role: 'tooltip'});
     chartData.addRows(markets);
 
-    var max = d3.max(currentDataset, function(el) { return el[1] });
+    var max = d3.max(markets, function(el) { return el[1] }) || 1;
 
     if (max < 1) max = 1;
 
@@ -390,24 +463,18 @@ function onGoogleLoaded() {
     chart.draw(chartData, options);
   }
 
-  function getLastSearch() {
-    return window.location.hash.substring(1) || localStorage.getItem('lastSearch');
+  function authenticate() {
+    var authUrl = Auth.getAuthUrl(SITE_URL);
+    window.location = authUrl;
   }
 
-  function setLastSearch(id) {
-    localStorage.setItem('lastSearch', id);
-    window.location.hash = id;
-  }
-
-  function setExactSearchEnabled(mode) {
-    localStorage.setItem('exactSearch', mode);
-  }
-
-  function getExactSearchEnabled() {
-    return localStorage.getItem('exactSearch') === 'true';
+  if (location.search.indexOf('auth_callback') > 0) {
+    Auth.parseResponse(location);
+    window.location = SITE_URL;
+    return;
   }
 
   chart = new google.visualization.GeoChart(chartContainer);
-  
-  performSearch(getLastSearch() || "18qY7zpuNqeXNGywRysjxx");
+
+  performSearch(Config.getLastSearch() || "18qY7zpuNqeXNGywRysjxx");
 }

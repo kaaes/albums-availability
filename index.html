@@ -53,6 +53,11 @@
       <h2>Only albums are supported</h2>
     </div>
 
+    <div class="get-token">
+      <h2>You need a Spotify token to be able to get albums data.</h2>
+      <button class="btn btn-default" id="login-button">Get Spotify token</button>
+    </div>
+
     <script id="template-album-info-big" type="x-tmpl-mustache">
       <h1 class="title">{{albumTitle}}</h1>
       <h2 class="artist">{{albumType}} by {{artistName}}</h2>
@@ -77,7 +82,10 @@
 
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="js/spotify.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
     <script type="text/javascript" src="js/script.js"></script>
   </body>
 </html>

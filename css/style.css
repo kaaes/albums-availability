@@ -218,7 +218,8 @@ a:focus {
   white-space: normal;
 }
 
-.albums-only {
+.albums-only,
+.get-token {
   display: none;
   width: 100%;
   position: absolute;
@@ -227,7 +228,8 @@ a:focus {
   text-align: center;
 }
 
-.invalid-search .albums-only {
+.invalid-search .albums-only,
+.no-token .get-token {
   display: block;
 }
 
