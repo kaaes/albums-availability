@@ -6,7 +6,7 @@ function onGoogleLoaded() {
   var SITE_URL = 'https://kaaes.github.io/albums-availability';
 
   var ALL_MARKETS = {
-        "AD": "Andorra",
+    "AD": "Andorra",
     "AE": "United Arab Emirates",
     "AL": "Albania",
     "AR": "Argentina",
